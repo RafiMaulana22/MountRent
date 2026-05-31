@@ -2,75 +2,239 @@
 
 include 'config/koneksi.php';
 
-$query = mysqli_query($conn, 'SELECT * FROM kategori ORDER BY id DESC');
+$query = mysqli_query(
+    $conn,
+    "
+    SELECT *
+    FROM kategori
+    ORDER BY id DESC
+",
+);
 
 ?>
 
-<div class="d-flex justify-content-between align-items-center mb-4">
+<!-- PAGE HEADER -->
 
-    <h3>
-        Data Kategori
-    </h3>
+<div class="page-header mb-4">
 
-    <a href="index.php?page=kategori-tambah" class="btn btn-dark">
+    <div>
+
+        <h2 class="page-title">
+
+            Data Kategori
+
+        </h2>
+
+        <p class="page-subtitle">
+
+            Kelola kategori perlengkapan rental outdoor
+
+        </p>
+
+    </div>
+
+    <a href="index.php?page=kategori-tambah" class="btn btn-success btn-modern">
+        <i class="bi bi-plus-circle me-2"></i>
+
         Tambah Kategori
     </a>
 
 </div>
 
-<div class="card border-0 shadow-sm">
+<!-- CARD -->
 
-    <div class="card-body">
+<div class="card modern-card border-0">
 
-        <table class="table table-bordered align-middle">
+    <div class="card-body p-4">
 
-            <thead>
+        <div class="table-responsive">
 
-                <tr>
-                    <th width="5%">No</th>
-                    <th>Nama Kategori</th>
-                    <th width="20%">Aksi</th>
-                </tr>
+            <table class="table align-middle" id="tableKategori">
 
-            </thead>
+                <thead>
 
-            <tbody>
+                    <tr>
 
-                <?php
-                $no = 1;
+                        <th width="8%">
+                            No
+                        </th>
 
-                while ($data = mysqli_fetch_assoc($query)) :
-                ?>
+                        <th>
+                            Nama Kategori
+                        </th>
 
-                <tr>
+                        <th width="18%">
+                            Aksi
+                        </th>
 
-                    <td><?= $no++ ?></td>
+                    </tr>
 
-                    <td>
-                        <?= $data['nama_kategori'] ?>
-                    </td>
+                </thead>
 
-                    <td>
+                <tbody>
 
-                        <a href="index.php?page=kategori-edit&id=<?= $data['id'] ?>" class="btn btn-warning btn-sm">
-                            Edit
-                        </a>
+                    <?php
+                    $no = 1;
 
-                        <a href="index.php?page=kategori-hapus&id=<?= $data['id'] ?>" class="btn btn-danger btn-sm"
-                            onclick="return confirm('Yakin hapus kategori?')">
-                            Hapus
-                        </a>
+                    while ($data = mysqli_fetch_assoc($query)) :
+                    ?>
 
-                    </td>
+                    <tr>
 
-                </tr>
+                        <td>
 
-                <?php endwhile; ?>
+                            <span class="table-number">
 
-            </tbody>
+                                <?= $no++ ?>
 
-        </table>
+                            </span>
+
+                        </td>
+
+                        <td>
+
+                            <div class="d-flex align-items-center gap-3">
+
+                                <div class="category-icon">
+
+                                    <i class="bi bi-tags-fill"></i>
+
+                                </div>
+
+                                <div class="fw-semibold">
+
+                                    <?= $data['nama_kategori'] ?>
+
+                                </div>
+
+                            </div>
+
+                        </td>
+
+                        <td>
+
+                            <div class="d-flex gap-2">
+
+                                <!-- EDIT -->
+
+                                <a href="index.php?page=kategori-edit&id=<?= $data['id'] ?>"
+                                    class="btn btn-warning btn-action">
+                                    <i class="bi bi-pencil-square"></i>
+                                </a>
+
+                                <!-- HAPUS -->
+
+                                <button type="button" class="btn btn-danger btn-action btn-delete"
+                                    data-href="index.php?page=kategori-hapus&id=<?= $data['id'] ?>">
+                                    <i class="bi bi-trash-fill"></i>
+                                </button>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                    <?php endwhile; ?>
+
+                </tbody>
+
+            </table>
+
+        </div>
 
     </div>
 
 </div>
+
+<!-- DATATABLE -->
+
+<script>
+    $(document).ready(function() {
+
+        let table = $('#tableKategori').DataTable({
+
+            responsive: true,
+
+            autoWidth: false,
+
+            pageLength: 10,
+
+            language: {
+
+                search: "_INPUT_",
+
+                searchPlaceholder: "Cari kategori...",
+
+                lengthMenu: "Tampilkan _MENU_ data",
+
+                info: "Menampilkan _START_ - _END_ dari _TOTAL_ data",
+
+                paginate: {
+
+                    previous: "‹",
+
+                    next: "›"
+
+                }
+
+            }
+
+        });
+
+        // SIDEBAR TOGGLE FIX
+
+        $('#toggleSidebar').on('click', function() {
+
+            setTimeout(function() {
+
+                table.columns.adjust().responsive.recalc();
+
+            }, 300);
+
+        });
+
+    });
+</script>
+
+<script>
+    $(document).ready(function() {
+
+        $(document).on('click', '.btn-delete', function() {
+
+            let href =
+                $(this).data('href');
+
+            Swal.fire({
+
+                title: 'Hapus Kategori?',
+
+                text: 'Data kategori akan dihapus permanen.',
+
+                icon: 'warning',
+
+                showCancelButton: true,
+
+                confirmButtonColor: '#dc2626',
+
+                cancelButtonColor: '#64748b',
+
+                confirmButtonText: 'Ya, Hapus',
+
+                cancelButtonText: 'Batal',
+
+                borderRadius: 20
+
+            }).then((result) => {
+
+                if (result.isConfirmed) {
+
+                    window.location.href = href;
+                }
+
+            });
+
+        });
+
+    });
+</script>

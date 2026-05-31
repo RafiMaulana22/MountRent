@@ -11,7 +11,8 @@ $query = mysqli_query(
 
     FROM (
 
-        -- barang langsung
+        -- BARANG LANGSUNG
+
         SELECT
             barang.nama_barang,
             detail_transaksi.jumlah as total_disewa
@@ -25,9 +26,11 @@ $query = mysqli_query(
 
         UNION ALL
 
-        -- barang dari paket
+        -- BARANG DARI PAKET
+
         SELECT
             barang.nama_barang,
+
             (
                 detail_transaksi.jumlah *
                 paket_detail.jumlah
@@ -56,58 +59,231 @@ $query = mysqli_query(
 
 ?>
 
-<h3 class="mb-4">
-    Barang Paling Disewa
-</h3>
+<!-- PAGE HEADER -->
 
-<div class="card border-0 shadow-sm">
+<div class="page-header mb-4">
 
-    <div class="card-body">
+    <div>
 
-        <div class="mb-3">
+        <h2 class="page-title">
 
-            <a href="index.php?page=laporan-print-barang" target="_blank" class="btn btn-success">
-                Print
-            </a>
+            Barang Paling Disewa
 
-        </div>
+        </h2>
 
-        <table class="table table-bordered">
+        <p class="page-subtitle">
 
-            <thead>
+            Statistik perlengkapan outdoor yang paling sering disewa
 
-                <tr>
-                    <th>No</th>
-                    <th>Nama Barang</th>
-                    <th>Total Disewa</th>
-                </tr>
+        </p>
 
-            </thead>
+    </div>
 
-            <tbody>
+    <div class="d-flex gap-2">
 
-                <?php
-                $no = 1;
+        <a href="index.php?page=laporan" class="btn btn-light btn-back">
 
-                while($data = mysqli_fetch_assoc($query)) :
-                ?>
+            <i class="bi bi-arrow-left me-2"></i>
 
-                <tr>
+            Kembali
 
-                    <td><?= $no++ ?></td>
+        </a>
 
-                    <td><?= $data['nama_barang'] ?></td>
+        <a href="pages/laporan/print-barang.php" target="_blank" class="btn btn-success btn-modern">
 
-                    <td><?= $data['total_sewa'] ?></td>
+            <i class="bi bi-printer-fill me-2"></i>
 
-                </tr>
+            Print Laporan
 
-                <?php endwhile; ?>
-
-            </tbody>
-
-        </table>
+        </a>
 
     </div>
 
 </div>
+
+<!-- CARD -->
+
+<div class="card modern-card border-0">
+
+    <div class="card-body p-4">
+
+        <div class="table-responsive">
+
+            <table class="table align-middle" id="tableBarangTerlaris">
+
+                <thead>
+
+                    <tr>
+
+                        <th width="8%">
+                            No
+                        </th>
+
+                        <th>
+                            Nama Barang
+                        </th>
+
+                        <th width="20%">
+                            Total Disewa
+                        </th>
+
+                        <th width="18%">
+                            Ranking
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    <?php
+                    $no = 1;
+
+                    while ($data = mysqli_fetch_assoc($query)) :
+
+                        // BADGE RANKING
+
+                        if ($no == 1) {
+
+                            $ranking = '
+                                <span class="ranking-badge gold">
+                                    <i class="bi bi-trophy-fill"></i>
+                                    #1 Terlaris
+                                </span>
+                            ';
+                        } elseif ($no == 2) {
+
+                            $ranking = '
+                                <span class="ranking-badge silver">
+                                    <i class="bi bi-award-fill"></i>
+                                    #2 Favorit
+                                </span>
+                            ';
+                        } elseif ($no == 3) {
+
+                            $ranking = '
+                                <span class="ranking-badge bronze">
+                                    <i class="bi bi-star-fill"></i>
+                                    #3 Populer
+                                </span>
+                            ';
+                        } else {
+
+                            $ranking = '
+                                <span class="ranking-badge default">
+                                    <i class="bi bi-bar-chart-fill"></i>
+                                    Top Rental
+                                </span>
+                            ';
+                        }
+
+                    ?>
+
+                    <tr>
+
+                        <td>
+
+                            <span class="table-number">
+
+                                <?= $no++ ?>
+
+                            </span>
+
+                        </td>
+
+                        <td>
+
+                            <div class="d-flex align-items-center gap-3">
+
+                                <div class="barang-icon">
+
+                                    <i class="bi bi-backpack2-fill"></i>
+
+                                </div>
+
+                                <div>
+
+                                    <div class="fw-semibold">
+
+                                        <?= $data['nama_barang'] ?>
+
+                                    </div>
+
+                                    <small class="text-muted">
+
+                                        Perlengkapan Outdoor
+
+                                    </small>
+
+                                </div>
+
+                            </div>
+
+                        </td>
+
+                        <td>
+
+                            <span class="sewa-badge">
+
+                                <?= number_format($data['total_sewa']) ?>x Disewa
+
+                            </span>
+
+                        </td>
+
+                        <td>
+
+                            <?= $ranking ?>
+
+                        </td>
+
+                    </tr>
+
+                    <?php endwhile; ?>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- DATATABLE -->
+
+<script>
+    $(document).ready(function() {
+
+        $('#tableBarangTerlaris').DataTable({
+
+            responsive: true,
+
+            pageLength: 10,
+
+            language: {
+
+                search: "_INPUT_",
+
+                searchPlaceholder: "Cari barang...",
+
+                lengthMenu: "Tampilkan _MENU_ data",
+
+                info: "Menampilkan _START_ - _END_ dari _TOTAL_ data",
+
+                paginate: {
+
+                    previous: "‹",
+
+                    next: "›"
+
+                }
+
+            }
+
+        });
+
+    });
+</script>

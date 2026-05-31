@@ -2,98 +2,344 @@
 
 include 'config/koneksi.php';
 
-$query = mysqli_query($conn, 'SELECT * FROM paket_rental ORDER BY id DESC');
+$query = mysqli_query(
+    $conn,
+    "
+    SELECT *
+    FROM paket_rental
+    ORDER BY id DESC
+"
+);
 
 ?>
 
-<div class="d-flex justify-content-between align-items-center mb-4">
+<!-- PAGE HEADER -->
 
-    <h3>
-        Paket Rental
-    </h3>
+<div class="page-header mb-4">
 
-    <a href="index.php?page=paket-tambah" class="btn btn-dark">
+    <div>
+
+        <h2 class="page-title">
+
+            Paket Rental
+
+        </h2>
+
+        <p class="page-subtitle">
+
+            Kelola paket perlengkapan rental outdoor
+
+        </p>
+
+    </div>
+
+    <a
+        href="index.php?page=paket-tambah"
+        class="btn btn-success btn-modern"
+    >
+        <i class="bi bi-plus-circle me-2"></i>
+
         Tambah Paket
     </a>
 
 </div>
 
-<div class="card border-0 shadow-sm">
+<!-- CARD -->
 
-    <div class="card-body">
+<div class="card modern-card border-0">
 
-        <table class="table table-bordered align-middle">
+    <div class="card-body p-4">
 
-            <thead>
+        <div class="table-responsive">
 
-                <tr>
-                    <th>No</th>
-                    <th>Foto</th>
-                    <th>Nama Paket</th>
-                    <th>Isi Paket</th>
-                    <th>Harga Paket</th>
-                    <th width="20%">Aksi</th>
-                </tr>
+            <table
+                class="table align-middle"
+                id="tablePaket"
+            >
 
-            </thead>
+                <thead>
 
-            <tbody>
+                    <tr>
 
-                <?php
-                $no = 1;
+                        <th width="6%">
+                            No
+                        </th>
 
-                while($data = mysqli_fetch_assoc($query)) :
-                ?>
+                        <th width="12%">
+                            Foto
+                        </th>
 
-                <tr>
+                        <th>
+                            Nama Paket
+                        </th>
 
-                    <td><?= $no++ ?></td>
+                        <th width="28%">
+                            Isi Paket
+                        </th>
 
-                    <td>
-                        <img src="uploads/paket/<?= $data['foto'] ?>" width="100">
-                    </td>
+                        <th width="15%">
+                            Harga
+                        </th>
 
-                    <td><?= $data['nama_paket'] ?></td>
+                        <th width="14%">
+                            Aksi
+                        </th>
 
-                    <td>
+                    </tr>
 
-                        <?php
+                </thead>
 
-                        $detail = mysqli_query($conn, "SELECT barang.nama_barang, paket_detail.jumlah FROM paket_detail JOIN barang ON paket_detail.barang_id = barang.id WHERE paket_detail.paket_id = '" . $data['id'] . "'");
+                <tbody>
 
-                        while ($d = mysqli_fetch_assoc($detail)) {
-                            echo '- ' . $d['nama_barang'] . ' (' . $d['jumlah'] . ')<br>';
-                        }
+                    <?php
+                    $no = 1;
 
-                        ?>
+                    while($data = mysqli_fetch_assoc($query)) :
+                    ?>
 
-                    </td>
+                    <tr>
 
-                    <td>
-                        Rp <?= number_format($data['harga_paket']) ?>
-                    </td>
+                        <!-- NO -->
 
-                    <td>
+                        <td>
 
-                        <a href="index.php?page=paket-edit&id=<?= $data['id'] ?>" class="btn btn-warning btn-sm">
-                            Edit
-                        </a>
+                            <span class="table-number">
 
-                        <a href="index.php?page=paket-hapus&id=<?= $data['id'] ?>" class="btn btn-danger btn-sm"
-                            onclick="return confirm('Yakin hapus paket?')">
-                            Hapus
-                        </a>
+                                <?= $no++ ?>
 
-                    </td>
+                            </span>
 
-                </tr>
+                        </td>
 
-                <?php endwhile; ?>
+                        <!-- FOTO -->
 
-            </tbody>
+                        <td>
 
-        </table>
+                            <img
+                                src="uploads/paket/<?= $data['foto'] ?>"
+                                class="table-image"
+                            >
+
+                        </td>
+
+                        <!-- NAMA -->
+
+                        <td>
+
+                            <div class="d-flex flex-column">
+
+                                <span class="fw-semibold table-title">
+
+                                    <?= $data['nama_paket'] ?>
+
+                                </span>
+
+                                <small class="table-subtitle">
+
+                                    Paket Rental Outdoor
+
+                                </small>
+
+                            </div>
+
+                        </td>
+
+                        <!-- ISI PAKET -->
+
+                        <td>
+
+                            <div class="package-items">
+
+                                <?php
+
+                                $detail = mysqli_query(
+                                    $conn,
+                                    "
+                                    SELECT
+                                        barang.nama_barang,
+                                        paket_detail.jumlah
+
+                                    FROM paket_detail
+
+                                    JOIN barang
+                                    ON paket_detail.barang_id = barang.id
+
+                                    WHERE paket_detail.paket_id = '" . $data['id'] . "'
+                                "
+                                );
+
+                                while ($d = mysqli_fetch_assoc($detail)) :
+                                ?>
+
+                                <div class="package-badge">
+
+                                    <span>
+
+                                        <?= $d['nama_barang'] ?>
+
+                                    </span>
+
+                                    <strong>
+
+                                        x<?= $d['jumlah'] ?>
+
+                                    </strong>
+
+                                </div>
+
+                                <?php endwhile; ?>
+
+                            </div>
+
+                        </td>
+
+                        <!-- HARGA -->
+
+                        <td>
+
+                            <div class="price-box">
+
+                                Rp <?= number_format($data['harga_paket']) ?>
+
+                            </div>
+
+                        </td>
+
+                        <!-- AKSI -->
+
+                        <td>
+
+                            <div class="d-flex gap-2">
+
+                                <!-- EDIT -->
+
+                                <a
+                                    href="index.php?page=paket-edit&id=<?= $data['id'] ?>"
+                                    class="btn btn-warning btn-action"
+                                >
+                                    <i class="bi bi-pencil-square"></i>
+                                </a>
+
+                                <!-- HAPUS -->
+
+                                <button
+                                    type="button"
+                                    class="btn btn-danger btn-action btn-delete"
+
+                                    data-href="
+                                        index.php?page=paket-hapus&id=<?= $data['id'] ?>
+                                    "
+                                >
+                                    <i class="bi bi-trash-fill"></i>
+                                </button>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                    <?php endwhile; ?>
+
+                </tbody>
+
+            </table>
+
+        </div>
 
     </div>
 
 </div>
+
+<!-- DATATABLE -->
+
+<script>
+
+    $(document).ready(function() {
+
+        $('#tablePaket').DataTable({
+
+            responsive: true,
+
+            pageLength: 10,
+
+            autoWidth: false,
+
+            language: {
+
+                search: "_INPUT_",
+
+                searchPlaceholder:
+                    "Cari paket rental...",
+
+                lengthMenu:
+                    "Tampilkan _MENU_ data",
+
+                info:
+                    "Menampilkan _START_ - _END_ dari _TOTAL_ data",
+
+                paginate: {
+
+                    previous: "‹",
+
+                    next: "›"
+                }
+            }
+
+        });
+
+    });
+
+</script>
+
+<!-- DELETE -->
+
+<script>
+
+    $(document).ready(function() {
+
+        $(document).on(
+            'click',
+            '.btn-delete',
+            function() {
+
+                let href =
+                    $(this).data('href');
+
+                Swal.fire({
+
+                    title: 'Hapus Paket?',
+
+                    text:
+                        'Data paket rental akan dihapus permanen.',
+
+                    icon: 'warning',
+
+                    showCancelButton: true,
+
+                    confirmButtonColor: '#dc2626',
+
+                    cancelButtonColor: '#64748b',
+
+                    confirmButtonText: 'Ya, Hapus',
+
+                    cancelButtonText: 'Batal',
+
+                    borderRadius: 20
+
+                }).then((result) => {
+
+                    if (result.isConfirmed) {
+
+                        window.location.href =
+                            href;
+                    }
+
+                });
+
+            }
+        );
+
+    });
+
+</script>

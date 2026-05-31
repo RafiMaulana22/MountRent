@@ -1,18 +1,76 @@
-<nav class="navbar navbar-dark bg-dark px-4">
+<nav class="navbar navbar-expand-lg admin-navbar">
 
-    <a href="#" class="navbar-brand">
-        Rental Mendaki
-    </a>
+    <div class="container-fluid">
 
-    <div class="text-white">
+        <!-- LEFT -->
 
-        <?= $_SESSION['nama_lengkap'] ?>
+        <div class="d-flex align-items-center">
 
-        |
+            <button class="btn btn-toggle-sidebar me-3" id="toggleSidebar">
+                <i class="bi bi-list"></i>
+            </button>
 
-        <a href="../auth/logout.php" class="text-decoration-none text-warning">
-            Logout
-        </a>
+            <div>
+
+                <h5 class="navbar-title mb-0">
+
+                    Dashboard Admin
+
+                </h5>
+
+                <small class="navbar-subtitle">
+
+                    MountRent Outdoor Rental
+
+                </small>
+
+            </div>
+
+        </div>
+
+        <!-- RIGHT -->
+
+        <div class="d-flex align-items-center gap-3">
+
+            <!-- DATE -->
+
+            <div class="date-box d-none d-md-flex">
+
+                <i class="bi bi-calendar-event me-2"></i>
+
+                <?= date('d F Y') ?>
+
+            </div>
+
+            <!-- ADMIN -->
+
+            <div class="admin-profile">
+
+                <div class="admin-avatar">
+
+                    <i class="bi bi-person-fill"></i>
+
+                </div>
+
+                <div class="admin-info d-none d-md-block">
+
+                    <div class="admin-name">
+
+                        Administrator
+
+                    </div>
+
+                    <small class="admin-role">
+
+                        Super Admin
+
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
 
     </div>
 

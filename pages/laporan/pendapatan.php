@@ -29,52 +29,140 @@ $query = mysqli_query(
 ",
 );
 
+$totalPendapatan = 0;
+
+$dataTotal = mysqli_query(
+    $conn,
+    "
+    SELECT SUM(total) as grand_total
+    FROM transaksi
+    $where
+",
+);
+
+$totalData = mysqli_fetch_assoc($dataTotal);
+
+$totalPendapatan = $totalData['grand_total'] ?? 0;
 ?>
 
-<h3 class="mb-4">
-    Laporan Pendapatan
-</h3>
+<!-- PAGE HEADER -->
 
-<div class="card border-0 shadow-sm mb-4">
+<div class="page-header mb-4">
 
-    <div class="card-body">
+    <div>
+
+        <h2 class="page-title">
+
+            Laporan Pendapatan
+
+        </h2>
+
+        <p class="page-subtitle">
+
+            Analisis total pendapatan transaksi rental outdoor
+
+        </p>
+
+    </div>
+
+    <a href="index.php?page=laporan" class="btn btn-light btn-back">
+
+        <i class="bi bi-arrow-left me-2"></i>
+
+        Kembali
+
+    </a>
+
+</div>
+
+<!-- FILTER -->
+
+<div class="card modern-card border-0 mb-4">
+
+    <div class="card-body p-4">
 
         <form method="GET">
 
             <input type="hidden" name="page" value="laporan-pendapatan">
 
-            <div class="row">
+            <div class="row g-4">
 
-                <div class="col-md-4 mb-3">
+                <!-- TANGGAL AWAL -->
 
-                    <label class="form-label">
+                <div class="col-lg-4">
+
+                    <label class="form-label modern-label">
+
                         Tanggal Awal
+
                     </label>
 
-                    <input type="date" name="tanggal_awal" class="form-control">
+                    <div class="input-group modern-input-group">
+
+                        <span class="input-group-text">
+
+                            <i class="bi bi-calendar-event"></i>
+
+                        </span>
+
+                        <input type="date" name="tanggal_awal" class="form-control modern-input"
+                            value="<?= $_GET['tanggal_awal'] ?? '' ?>">
+
+                    </div>
 
                 </div>
 
-                <div class="col-md-4 mb-3">
+                <!-- TANGGAL AKHIR -->
 
-                    <label class="form-label">
+                <div class="col-lg-4">
+
+                    <label class="form-label modern-label">
+
                         Tanggal Akhir
+
                     </label>
 
-                    <input type="date" name="tanggal_akhir" class="form-control">
+                    <div class="input-group modern-input-group">
+
+                        <span class="input-group-text">
+
+                            <i class="bi bi-calendar-check"></i>
+
+                        </span>
+
+                        <input type="date" name="tanggal_akhir" class="form-control modern-input"
+                            value="<?= $_GET['tanggal_akhir'] ?? '' ?>">
+
+                    </div>
 
                 </div>
 
-                <div class="col-md-4 d-flex align-items-end mb-3">
+                <!-- BUTTON -->
 
-                    <button type="submit" class="btn btn-dark me-2">
-                        Filter
-                    </button>
+                <div class="col-lg-4">
 
-                    <a href="index.php?page=laporan-print-pendapatan&tanggal_awal=<?= $_GET['tanggal_awal'] ?? '' ?>&tanggal_akhir=<?= $_GET['tanggal_akhir'] ?? '' ?>"
-                        target="_blank" class="btn btn-success">
-                        Print
-                    </a>
+                    <label class="form-label opacity-0">
+                        Action
+                    </label>
+
+                    <div class="d-flex gap-3">
+
+                        <button type="submit" class="btn btn-success btn-modern-submit flex-grow-1">
+
+                            <i class="bi bi-funnel-fill me-2"></i>
+
+                            Filter
+
+                        </button>
+
+                        <a href="pages/laporan/print-pendapatan.php?tanggal_awal=<?= $_GET['tanggal_awal'] ?? '' ?>&tanggal_akhir=<?= $_GET['tanggal_akhir'] ?? '' ?>"
+                            target="_blank" class="btn btn-dark btn-modern-print">
+
+                            <i class="bi bi-printer-fill"></i>
+
+                        </a>
+
+                    </div>
 
                 </div>
 
@@ -86,69 +174,177 @@ $query = mysqli_query(
 
 </div>
 
-<div class="card border-0 shadow-sm">
+<!-- TOTAL CARD -->
 
-    <div class="card-body">
+<div class="row mb-4">
 
-        <table class="table table-bordered">
+    <div class="col-lg-4">
 
-            <thead>
+        <div class="income-summary-card">
 
-                <tr>
-                    <th>No</th>
-                    <th>Kode</th>
-                    <th>Tanggal</th>
-                    <th>Total</th>
-                </tr>
+            <div class="summary-icon">
 
-            </thead>
+                <i class="bi bi-cash-stack"></i>
 
-            <tbody>
+            </div>
 
-                <?php
-                $no = 1;
+            <div>
 
-                while($data = mysqli_fetch_assoc($query)) :
+                <div class="summary-label">
 
-                    $totalPendapatan += $data['total'];
-                ?>
+                    Total Pendapatan
 
-                <tr>
+                </div>
 
-                    <td><?= $no++ ?></td>
+                <div class="summary-value">
 
-                    <td><?= $data['kode_transaksi'] ?></td>
+                    Rp
+                    <?= number_format($totalPendapatan) ?>
 
-                    <td><?= $data['tanggal_sewa'] ?></td>
+                </div>
 
-                    <td>
-                        Rp <?= number_format($data['total']) ?>
-                    </td>
+            </div>
 
-                </tr>
-
-                <?php endwhile; ?>
-
-            </tbody>
-
-            <tfoot>
-
-                <tr>
-
-                    <th colspan="3">
-                        Total Pendapatan
-                    </th>
-
-                    <th>
-                        Rp <?= number_format($totalPendapatan) ?>
-                    </th>
-
-                </tr>
-
-            </tfoot>
-
-        </table>
+        </div>
 
     </div>
 
 </div>
+
+<!-- TABLE -->
+
+<div class="card modern-card border-0">
+
+    <div class="card-body p-4">
+
+        <div class="table-responsive">
+
+            <table class="table align-middle" id="tablePendapatan">
+
+                <thead>
+
+                    <tr>
+
+                        <th width="8%">
+                            No
+                        </th>
+
+                        <th>
+                            Kode Transaksi
+                        </th>
+
+                        <th>
+                            Tanggal Sewa
+                        </th>
+
+                        <th>
+                            Total
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    <?php
+                    $no = 1;
+
+                    mysqli_data_seek($query, 0);
+
+                    while ($data = mysqli_fetch_assoc($query)) :
+
+                        $totalPendapatan += $data['total'];
+                    ?>
+
+                    <tr>
+
+                        <td>
+
+                            <span class="table-number">
+
+                                <?= $no++ ?>
+
+                            </span>
+
+                        </td>
+
+                        <td>
+
+                            <div class="transaction-code">
+
+                                <?= $data['kode_transaksi'] ?>
+
+                            </div>
+
+                        </td>
+
+                        <td>
+
+                            <div class="date-badge">
+
+                                <i class="bi bi-calendar3 me-2"></i>
+
+                                <?= date('d M Y', strtotime($data['tanggal_sewa'])) ?>
+
+                            </div>
+
+                        </td>
+
+                        <td>
+
+                            <div class="price-badge">
+
+                                Rp
+                                <?= number_format($data['total']) ?>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                    <?php endwhile; ?>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- DATATABLE -->
+
+<script>
+    $(document).ready(function() {
+
+        $('#tablePendapatan').DataTable({
+
+            responsive: true,
+
+            pageLength: 10,
+
+            language: {
+
+                search: "_INPUT_",
+
+                searchPlaceholder: "Cari transaksi...",
+
+                lengthMenu: "Tampilkan _MENU_ data",
+
+                info: "Menampilkan _START_ - _END_ dari _TOTAL_ data",
+
+                paginate: {
+
+                    previous: "‹",
+
+                    next: "›"
+                }
+            }
+        });
+
+    });
+</script>

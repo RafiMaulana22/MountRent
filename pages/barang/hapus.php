@@ -14,5 +14,11 @@ if ($data['foto'] != '') {
 
 mysqli_query($conn, "DELETE FROM barang WHERE id = '$id'");
 
-header('Location: index.php?page=barang');
+echo "
+        <script>
+            window.location =
+                'index.php?page=barang';
+        </script>
+    ";
+
 exit();

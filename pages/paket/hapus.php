@@ -16,5 +16,11 @@ mysqli_query($conn, "DELETE FROM paket_detail WHERE paket_id = '$id'");
 
 mysqli_query($conn, "DELETE FROM paket_rental WHERE id = '$id'");
 
-header('Location: index.php?page=paket');
+echo "
+        <script>
+            window.location =
+                'index.php?page=paket';
+        </script>
+    ";
+
 exit();

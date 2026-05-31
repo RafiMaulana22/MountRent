@@ -2,14 +2,26 @@
 
 include 'config/koneksi.php';
 
-$barang = mysqli_query($conn, 'SELECT * FROM barang ORDER BY nama_barang ASC');
+$barang = mysqli_query(
+    $conn,
+    "
+    SELECT *
+    FROM barang
+    ORDER BY nama_barang ASC
+",
+);
 
 if (isset($_POST['submit'])) {
     $nama_paket = htmlspecialchars($_POST['nama_paket']);
+
     $harga_paket = $_POST['harga_paket'];
+
     $deskripsi = htmlspecialchars($_POST['deskripsi']);
 
+    // FOTO
+
     $foto = $_FILES['foto']['name'];
+
     $tmp = $_FILES['foto']['tmp_name'];
 
     $extension = pathinfo($foto, PATHINFO_EXTENSION);
@@ -18,15 +30,20 @@ if (isset($_POST['submit'])) {
 
     move_uploaded_file($tmp, 'uploads/paket/' . $namaFotoBaru);
 
+    // INSERT PAKET
+
     mysqli_query(
         $conn,
         "
         INSERT INTO paket_rental (
+
             nama_paket,
             harga_paket,
             deskripsi,
             foto
+
         ) VALUES (
+
             '$nama_paket',
             '$harga_paket',
             '$deskripsi',
@@ -37,6 +54,8 @@ if (isset($_POST['submit'])) {
 
     $paket_id = mysqli_insert_id($conn);
 
+    // INSERT DETAIL
+
     if (isset($_POST['barang'])) {
         foreach ($_POST['barang'] as $barang_id) {
             $jumlah = $_POST['jumlah'][$barang_id];
@@ -44,118 +63,319 @@ if (isset($_POST['submit'])) {
             mysqli_query(
                 $conn,
                 "
-            INSERT INTO paket_detail (
-                paket_id,
-                barang_id,
-                jumlah
-            ) VALUES (
-                '$paket_id',
-                '$barang_id',
-                '$jumlah'
-            )
-        ",
+                INSERT INTO paket_detail (
+
+                    paket_id,
+                    barang_id,
+                    jumlah
+
+                ) VALUES (
+
+                    '$paket_id',
+                    '$barang_id',
+                    '$jumlah'
+                )
+            ",
             );
         }
     }
 
-    header('Location: index.php?page=paket');
+    echo "
+        <script>
+            window.location.href =
+                'index.php?page=paket';
+        </script>
+    ";
+
     exit();
 }
 
 ?>
 
-<h3 class="mb-4">
-    Tambah Paket Rental
-</h3>
+<!-- PAGE HEADER -->
 
-<div class="card border-0 shadow-sm">
+<div class="page-header mb-4">
 
-    <div class="card-body">
+    <div>
 
-        <form method="POST" enctype="multipart/form-data">
+        <h2 class="page-title">
 
-            <div class="mb-3">
+            Tambah Paket Rental
 
-                <label class="form-label">
-                    Nama Paket
-                </label>
+        </h2>
 
-                <input type="text" name="nama_paket" class="form-control" required>
+        <p class="page-subtitle">
 
-            </div>
+            Tambahkan paket perlengkapan rental outdoor baru
 
-            <div class="mb-3">
-
-                <label class="form-label">
-                    Harga Paket
-                </label>
-
-                <input type="number" name="harga_paket" class="form-control" required>
-
-            </div>
-
-            <div class="mb-3">
-
-                <label class="form-label">
-                    Deskripsi
-                </label>
-
-                <textarea name="deskripsi" class="form-control" rows="4"></textarea>
-
-            </div>
-
-            <div class="mb-3">
-
-                <label class="form-label">
-                    Pilih Barang
-                </label>
-
-                <?php while($b = mysqli_fetch_assoc($barang)) : ?>
-
-                <div class="border rounded p-3 mb-2">
-
-                    <div class="form-check mb-2">
-
-                        <input type="checkbox" name="barang[<?= $b['id'] ?>]" value="<?= $b['id'] ?>"
-                            class="form-check-input">
-
-                        <label class="form-check-label">
-
-                            <?= $b['nama_barang'] ?>
-
-                        </label>
-
-                    </div>
-
-                    <input type="number" name="jumlah[<?= $b['id'] ?>]" class="form-control" min="1"
-                        value="1">
-
-                </div>
-
-                <?php endwhile; ?>
-
-            </div>
-
-            <div class="mb-3">
-
-                <label class="form-label">
-                    Foto Paket
-                </label>
-
-                <input type="file" name="foto" class="form-control" required>
-
-            </div>
-
-            <button type="submit" name="submit" class="btn btn-dark">
-                Simpan
-            </button>
-
-            <a href="index.php?page=paket" class="btn btn-secondary">
-                Kembali
-            </a>
-
-        </form>
+        </p>
 
     </div>
 
+    <a href="index.php?page=paket" class="btn btn-light btn-back">
+        <i class="bi bi-arrow-left me-2"></i>
+
+        Kembali
+    </a>
+
 </div>
+
+<!-- FORM -->
+
+<form method="POST" enctype="multipart/form-data">
+
+    <div class="row g-4">
+
+        <!-- LEFT -->
+
+        <div class="col-lg-8">
+
+            <div class="card modern-card border-0">
+
+                <div class="card-body p-4 p-lg-5">
+
+                    <!-- NAMA PAKET -->
+
+                    <div class="mb-4">
+
+                        <label class="form-label modern-label">
+
+                            Nama Paket
+
+                        </label>
+
+                        <div class="input-group modern-input-group">
+
+                            <span class="input-group-text">
+
+                                <i class="bi bi-box2-heart-fill"></i>
+
+                            </span>
+
+                            <input type="text" name="nama_paket" class="form-control modern-input"
+                                placeholder="Masukkan nama paket rental" required>
+
+                        </div>
+
+                    </div>
+
+                    <!-- HARGA -->
+
+                    <div class="mb-4">
+
+                        <label class="form-label modern-label">
+
+                            Harga Paket
+
+                        </label>
+
+                        <div class="input-group modern-input-group">
+
+                            <span class="input-group-text">
+
+                                Rp
+
+                            </span>
+
+                            <input type="number" name="harga_paket" class="form-control modern-input" placeholder="0"
+                                required>
+
+                        </div>
+
+                    </div>
+
+                    <!-- DESKRIPSI -->
+
+                    <div class="mb-4">
+
+                        <label class="form-label modern-label">
+
+                            Deskripsi Paket
+
+                        </label>
+
+                        <textarea name="deskripsi" class="form-control modern-textarea" rows="5"
+                            placeholder="Masukkan deskripsi paket rental..."></textarea>
+
+                    </div>
+
+                    <!-- PILIH BARANG -->
+
+                    <div class="mb-4">
+
+                        <label class="form-label modern-label mb-3">
+
+                            Pilih Isi Paket
+
+                        </label>
+
+                        <div class="package-selection">
+
+                            <?php while($b = mysqli_fetch_assoc($barang)) : ?>
+
+                            <div class="package-item-card">
+
+                                <div class="d-flex justify-content-between align-items-center">
+
+                                    <!-- CHECKBOX -->
+
+                                    <div class="form-check d-flex align-items-center gap-3">
+
+                                        <input type="checkbox" name="barang[<?= $b['id'] ?>]" value="<?= $b['id'] ?>"
+                                            class="form-check-input package-checkbox" id="barang<?= $b['id'] ?>">
+
+                                        <label class="form-check-label package-label" for="barang<?= $b['id'] ?>">
+
+                                            <div class="package-icon">
+
+                                                <i class="bi bi-backpack-fill"></i>
+
+                                            </div>
+
+                                            <div>
+
+                                                <div class="package-name">
+
+                                                    <?= $b['nama_barang'] ?>
+
+                                                </div>
+
+                                                <small class="package-category">
+
+                                                    <?= $b['kapasitas'] ?>
+
+                                                </small>
+
+                                            </div>
+
+                                        </label>
+
+                                    </div>
+
+                                    <!-- JUMLAH -->
+
+                                    <div class="package-qty">
+
+                                        <label class="qty-label">
+
+                                            Jumlah
+
+                                        </label>
+
+                                        <input type="number" name="jumlah[<?= $b['id'] ?>]"
+                                            class="form-control qty-input" min="1" value="1">
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <?php endwhile; ?>
+
+                        </div>
+
+                    </div>
+
+                    <!-- BUTTON -->
+
+                    <div class="d-flex gap-3 mt-4">
+
+                        <button type="submit" name="submit" class="btn btn-success btn-modern-submit">
+                            <i class="bi bi-check-circle-fill me-2"></i>
+
+                            Simpan Paket
+                        </button>
+
+                        <a href="index.php?page=paket" class="btn btn-light btn-modern-cancel">
+                            Batal
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- RIGHT -->
+
+        <div class="col-lg-4">
+
+            <div class="upload-card">
+
+                <h5 class="upload-title">
+
+                    Foto Paket
+
+                </h5>
+
+                <label for="foto" class="upload-box">
+
+                    <!-- PREVIEW -->
+
+                    <img id="previewImage" class="preview-image d-none">
+
+                    <!-- PLACEHOLDER -->
+
+                    <div class="upload-placeholder" id="uploadPlaceholder">
+
+                        <i class="bi bi-cloud-arrow-up-fill"></i>
+
+                        <span>
+                            Upload Foto Paket
+                        </span>
+
+                    </div>
+
+                </label>
+
+                <input type="file" name="foto" id="foto" class="d-none" accept="image/*" required>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</form>
+
+<!-- PREVIEW IMAGE -->
+
+<script>
+    document
+        .getElementById('foto')
+        .addEventListener('change', function(e) {
+
+            const file =
+                e.target.files[0];
+
+            if (file) {
+
+                const reader =
+                    new FileReader();
+
+                reader.onload = function(event) {
+
+                    document
+                        .getElementById('previewImage')
+                        .src =
+                        event.target.result;
+
+                    document
+                        .getElementById('previewImage')
+                        .classList
+                        .remove('d-none');
+
+                    document
+                        .getElementById('uploadPlaceholder')
+                        .classList
+                        .add('d-none');
+                };
+
+                reader.readAsDataURL(file);
+            }
+
+        });
+</script>

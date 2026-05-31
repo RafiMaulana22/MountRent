@@ -1,65 +1,154 @@
-<div class="bg-dark text-white p-3 sidebar">
+<?php
 
-    <h5 class="mb-4">
-        Menu Admin
-    </h5>
+$currentPage = $_GET['page'] ?? 'dashboard';
 
-    <ul class="nav flex-column">
+?>
 
-        <li class="nav-item mb-2">
-            <a href="index.php?page=dashboard" class="nav-link text-white">
+<div class="sidebar" id="sidebar">
+
+    <!-- LOGO -->
+
+    <div class="sidebar-brand">
+
+        <div class="brand-icon">
+
+            <i class="bi bi-backpack2-fill"></i>
+
+        </div>
+
+        <div>
+
+            <h4 class="brand-title">
+
+                MountRent
+
+            </h4>
+
+            <small class="brand-subtitle">
+
+                Admin Panel
+
+            </small>
+
+        </div>
+
+    </div>
+
+    <!-- MENU -->
+
+    <div class="sidebar-menu">
+
+        <!-- DASHBOARD -->
+
+        <a href="index.php?page=dashboard" class="menu-item <?= $currentPage == 'dashboard' ? 'active' : '' ?>">
+            <i class="bi bi-grid-fill"></i>
+
+            <span>
                 Dashboard
-            </a>
-        </li>
+            </span>
+        </a>
 
-        <li class="nav-item mb-2">
-            <a href="index.php?page=kategori" class="nav-link text-white">
+        <!-- KATEGORI -->
+
+        <a href="index.php?page=kategori"
+            class="menu-item <?= strpos($currentPage, 'kategori') !== false ? 'active' : '' ?>">
+            <i class="bi bi-tags-fill"></i>
+
+            <span>
                 Kategori
-            </a>
-        </li>
+            </span>
+        </a>
 
-        <li class="nav-item mb-2">
-            <a href="index.php?page=barang" class="nav-link text-white">
+        <!-- BARANG -->
+
+        <a href="index.php?page=barang"
+            class="menu-item <?= strpos($currentPage, 'barang') !== false ? 'active' : '' ?>">
+            <i class="bi bi-backpack-fill"></i>
+
+            <span>
                 Barang
-            </a>
-        </li>
+            </span>
+        </a>
 
-        <li class="nav-item mb-2">
-            <a href="index.php?page=paket" class="nav-link text-white">
+        <!-- PAKET -->
+
+        <a href="index.php?page=paket" class="menu-item <?= strpos($currentPage, 'paket') !== false ? 'active' : '' ?>">
+            <i class="bi bi-box2-heart-fill"></i>
+
+            <span>
                 Paket Rental
-            </a>
-        </li>
+            </span>
+        </a>
 
-        <li class="nav-item mb-2">
-            <a href="index.php?page=penyewa" class="nav-link text-white">
+        <!-- PENYEWA -->
+
+        <a href="index.php?page=penyewa"
+            class="menu-item <?= strpos($currentPage, 'penyewa') !== false ? 'active' : '' ?>">
+            <i class="bi bi-people-fill"></i>
+
+            <span>
                 Penyewa
-            </a>
-        </li>
+            </span>
+        </a>
 
-        <li class="nav-item mb-2">
-            <a href="index.php?page=transaksi" class="nav-link text-white">
+        <!-- TRANSAKSI -->
+
+        <a href="index.php?page=transaksi"
+            class="menu-item <?= strpos($currentPage, 'transaksi') !== false ? 'active' : '' ?>">
+            <i class="bi bi-receipt-cutoff"></i>
+
+            <span>
                 Transaksi
-            </a>
-        </li>
+            </span>
+        </a>
 
-        <li class="nav-item mb-2">
-            <a href="index.php?page=riwayat" class="nav-link text-white">
+        <!-- RIWAYAT -->
+
+        <a href="index.php?page=riwayat"
+            class="menu-item <?= strpos($currentPage, 'riwayat') !== false ? 'active' : '' ?>">
+            <i class="bi bi-clock-history"></i>
+
+            <span>
                 Riwayat
-            </a>
-        </li>
+            </span>
+        </a>
 
-        <li class="nav-item mb-2">
-            <a href="index.php?page=laporan" class="nav-link text-white">
+        <!-- LAPORAN -->
+
+        <a href="index.php?page=laporan"
+            class="menu-item <?= strpos($currentPage, 'laporan') !== false ? 'active' : '' ?>">
+            <i class="bi bi-bar-chart-fill"></i>
+
+            <span>
                 Laporan
-            </a>
-        </li>
+            </span>
+        </a>
 
-        <li class="nav-item mb-2">
-            <a href="index.php?page=pengaturan" class="nav-link text-white">
+        <!-- PENGATURAN -->
+
+        <!-- <a href="index.php?page=pengaturan"
+            class="menu-item <?= strpos($currentPage, 'pengaturan') !== false ? 'active' : '' ?>">
+            <i class="bi bi-gear-fill"></i>
+
+            <span>
                 Pengaturan
-            </a>
-        </li>
+            </span>
+        </a> -->
 
-    </ul>
+    </div>
+
+    <!-- FOOTER -->
+
+    <div class="sidebar-footer">
+
+        <a href="auth/logout.php" class="logout-btn">
+            <i class="bi bi-box-arrow-left"></i>
+
+            <span>
+                Logout
+            </span>
+        </a>
+
+    </div>
 
 </div>

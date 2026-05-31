@@ -7,7 +7,10 @@ $id = $_GET['id'];
 $query = mysqli_query(
     $conn,
     "
-    SELECT transaksi.*, penyewa.nama
+    SELECT
+        transaksi.*,
+        penyewa.nama
+
     FROM transaksi
 
     JOIN penyewa
@@ -23,8 +26,11 @@ $detail = mysqli_query(
     $conn,
     "
     SELECT
+
         detail_transaksi.*,
+
         barang.nama_barang,
+
         paket_rental.nama_paket
 
     FROM detail_transaksi
@@ -41,105 +47,339 @@ $detail = mysqli_query(
 
 ?>
 
-<h3 class="mb-4">
-    Detail Riwayat Transaksi
-</h3>
+<!-- PAGE HEADER -->
 
-<div class="card border-0 shadow-sm mb-4">
+<div class="page-header mb-4">
 
-    <div class="card-body">
+    <div>
 
-        <table class="table">
+        <h2 class="page-title">
 
-            <tr>
-                <th width="25%">Kode</th>
-                <td><?= $data['kode_transaksi'] ?></td>
-            </tr>
+            Detail Riwayat Transaksi
 
-            <tr>
-                <th>Penyewa</th>
-                <td><?= $data['nama'] ?></td>
-            </tr>
+        </h2>
 
-            <tr>
-                <th>Tanggal Sewa</th>
-                <td><?= $data['tanggal_sewa'] ?></td>
-            </tr>
+        <p class="page-subtitle">
 
-            <tr>
-                <th>Tanggal Kembali</th>
-                <td><?= $data['tanggal_kembali'] ?></td>
-            </tr>
+            Informasi lengkap riwayat transaksi penyewaan
 
-            <tr>
-                <th>Total</th>
-                <td>
-                    Rp <?= number_format($data['total']) ?>
-                </td>
-            </tr>
-
-        </table>
+        </p>
 
     </div>
 
+    <a href="index.php?page=riwayat" class="btn btn-light btn-back">
+        <i class="bi bi-arrow-left me-2"></i>
+
+        Kembali
+    </a>
+
 </div>
 
-<div class="card border-0 shadow-sm">
+<div class="row g-4">
 
-    <div class="card-body">
+    <!-- LEFT -->
 
-        <table class="table table-bordered">
+    <div class="col-lg-4">
 
-            <thead>
+        <!-- SUMMARY CARD -->
 
-                <tr>
-                    <th>No</th>
-                    <th>Item</th>
-                    <th>Harga</th>
-                    <th>Jumlah</th>
-                    <th>Lama Hari</th>
-                    <th>Subtotal</th>
-                </tr>
+        <div class="transaction-detail-card">
 
-            </thead>
+            <div class="detail-icon">
 
-            <tbody>
+                <i class="bi bi-clock-history"></i>
 
-                <?php
-                $no = 1;
+            </div>
 
-                while($d = mysqli_fetch_assoc($detail)) :
-                ?>
+            <h4 class="detail-title">
 
-                <tr>
+                <?= $data['kode_transaksi'] ?>
 
-                    <td><?= $no++ ?></td>
+            </h4>
 
-                    <td>
+            <p class="detail-subtitle">
 
-                        <?= $d['nama_barang'] ?: $d['nama_paket'] ?>
+                Detail riwayat transaksi penyewaan perlengkapan outdoor MountRent
 
-                    </td>
+            </p>
 
-                    <td>
-                        Rp <?= number_format($d['harga']) ?>
-                    </td>
+            <div class="detail-info-list">
 
-                    <td><?= $d['jumlah'] ?></td>
+                <!-- PENYEWA -->
 
-                    <td><?= $d['lama_hari'] ?> Hari</td>
+                <div class="detail-info-item">
 
-                    <td>
-                        Rp <?= number_format($d['subtotal']) ?>
-                    </td>
+                    <div class="info-icon">
 
-                </tr>
+                        <i class="bi bi-person-fill"></i>
 
-                <?php endwhile; ?>
+                    </div>
 
-            </tbody>
+                    <div>
 
-        </table>
+                        <small>
+                            Penyewa
+                        </small>
+
+                        <div class="info-value">
+
+                            <?= $data['nama'] ?>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- TANGGAL SEWA -->
+
+                <div class="detail-info-item">
+
+                    <div class="info-icon">
+
+                        <i class="bi bi-calendar-check-fill"></i>
+
+                    </div>
+
+                    <div>
+
+                        <small>
+                            Tanggal Sewa
+                        </small>
+
+                        <div class="info-value">
+
+                            <?= date('d M Y', strtotime($data['tanggal_sewa'])) ?>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- TANGGAL KEMBALI -->
+
+                <div class="detail-info-item">
+
+                    <div class="info-icon">
+
+                        <i class="bi bi-calendar2-week-fill"></i>
+
+                    </div>
+
+                    <div>
+
+                        <small>
+                            Tanggal Kembali
+                        </small>
+
+                        <div class="info-value">
+
+                            <?= date('d M Y', strtotime($data['tanggal_kembali'])) ?>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- TOTAL -->
+
+                <div class="detail-total-box">
+
+                    <small>
+                        Total Transaksi
+                    </small>
+
+                    <h3>
+
+                        Rp <?= number_format($data['total']) ?>
+
+                    </h3>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- RIGHT -->
+
+    <div class="col-lg-8">
+
+        <div class="card modern-card border-0">
+
+            <div class="card-body p-4">
+
+                <div class="section-title mb-4">
+
+                    <i class="bi bi-box-seam-fill"></i>
+
+                    Detail Item Rental
+
+                </div>
+
+                <div class="table-responsive">
+
+                    <table class="table align-middle">
+
+                        <thead>
+
+                            <tr>
+
+                                <th width="5%">
+                                    No
+                                </th>
+
+                                <th>
+                                    Item
+                                </th>
+
+                                <th>
+                                    Harga
+                                </th>
+
+                                <th>
+                                    Jumlah
+                                </th>
+
+                                <th>
+                                    Lama Hari
+                                </th>
+
+                                <th>
+                                    Subtotal
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            <?php
+                            $no = 1;
+
+                            while($d = mysqli_fetch_assoc($detail)) :
+                            ?>
+
+                            <tr>
+
+                                <!-- NO -->
+
+                                <td>
+
+                                    <span class="table-number">
+
+                                        <?= $no++ ?>
+
+                                    </span>
+
+                                </td>
+
+                                <!-- ITEM -->
+
+                                <td>
+
+                                    <div class="item-box">
+
+                                        <div class="item-icon">
+
+                                            <?php if($d['nama_barang']) : ?>
+
+                                            <i class="bi bi-backpack-fill"></i>
+
+                                            <?php else : ?>
+
+                                            <i class="bi bi-box2-heart-fill"></i>
+
+                                            <?php endif; ?>
+
+                                        </div>
+
+                                        <div>
+
+                                            <div class="fw-bold text-dark">
+
+                                                <?= $d['nama_barang'] ?: $d['nama_paket'] ?>
+
+                                            </div>
+
+                                            <small class="text-muted">
+
+                                                <?= $d['nama_barang'] ? 'Barang Rental' : 'Paket Rental' ?>
+
+                                            </small>
+
+                                        </div>
+
+                                    </div>
+
+                                </td>
+
+                                <!-- HARGA -->
+
+                                <td>
+
+                                    <div class="price-tag">
+
+                                        Rp <?= number_format($d['harga']) ?>
+
+                                    </div>
+
+                                </td>
+
+                                <!-- JUMLAH -->
+
+                                <td>
+
+                                    <span class="qty-badge">
+
+                                        <?= $d['jumlah'] ?>x
+
+                                    </span>
+
+                                </td>
+
+                                <!-- HARI -->
+
+                                <td>
+
+                                    <span class="day-badge">
+
+                                        <?= $d['lama_hari'] ?> Hari
+
+                                    </span>
+
+                                </td>
+
+                                <!-- SUBTOTAL -->
+
+                                <td>
+
+                                    <div class="subtotal-box">
+
+                                        Rp <?= number_format($d['subtotal']) ?>
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+                            <?php endwhile; ?>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
 
     </div>
 

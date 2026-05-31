@@ -27,7 +27,7 @@ $kode_transaksi = 'TRX' . sprintf('%03s', $urutan);
 if (isset($_POST['submit'])) {
     $nama_penyewa = htmlspecialchars($_POST['nama_penyewa']);
 
-    $queryPenyewa = mysqli_query($conn, "SELECT * FROM penyewa WHERE nama = '$nama_penyewa'",);
+    $queryPenyewa = mysqli_query($conn, "SELECT * FROM penyewa WHERE nama = '$nama_penyewa'");
 
     $dataPenyewa = mysqli_fetch_assoc($queryPenyewa);
 
@@ -37,7 +37,7 @@ if (isset($_POST['submit'])) {
     } else {
         // tambah penyewa baru
 
-        mysqli_query($conn, "INSERT INTO penyewa (nama) VALUES ('$nama_penyewa')",);
+        mysqli_query($conn, "INSERT INTO penyewa (nama) VALUES ('$nama_penyewa')");
 
         $penyewa_id = mysqli_insert_id($conn);
     }
@@ -165,138 +165,406 @@ if (isset($_POST['submit'])) {
     ",
     );
 
-    header('Location: index.php?page=transaksi');
+    echo "
+        <script>
+            window.location.href =
+                'index.php?page=transaksi';
+        </script>
+    ";
+
     exit();
 }
 
 ?>
 
-<h3 class="mb-4">
-    Tambah Transaksi
-</h3>
 
-<div class="card border-0 shadow-sm">
+<!-- PAGE HEADER -->
 
-    <div class="card-body">
+<div class="page-header mb-4">
 
-        <form method="POST">
+    <div>
 
-            <div class="row">
+        <h2 class="page-title">
 
-                <div class="col-md-6 mb-3">
+            Tambah Transaksi
 
-                    <label class="form-label">
-                        Kode Transaksi
-                    </label>
+        </h2>
 
-                    <input type="text" class="form-control" value="<?= $kode_transaksi ?>" readonly>
+        <p class="page-subtitle">
 
-                </div>
+            Tambahkan transaksi penyewaan perlengkapan outdoor
 
-                <div class="col-md-6 mb-3">
-
-                    <label class="form-label">
-                        Nama Penyewa
-                    </label>
-
-                    <input type="text" name="nama_penyewa" class="form-control" required>
-
-                </div>
-
-                <div class="col-md-6 mb-3">
-
-                    <label class="form-label">
-                        Tanggal Sewa
-                    </label>
-
-                    <input type="date" name="tanggal_sewa" class="form-control" required>
-
-                </div>
-
-                <div class="col-md-6 mb-3">
-
-                    <label class="form-label">
-                        Tanggal Kembali
-                    </label>
-
-                    <input type="date" name="tanggal_kembali" class="form-control" required>
-
-                </div>
-
-            </div>
-
-            <hr>
-
-            <h5 class="mb-3">
-                Pilih Barang
-            </h5>
-
-            <?php while($b = mysqli_fetch_assoc($barang)) : ?>
-
-            <div class="border rounded p-3 mb-2">
-
-                <div class="form-check mb-2">
-
-                    <input type="checkbox" name="barang[<?= $b['id'] ?>]" value="<?= $b['id'] ?>"
-                        class="form-check-input">
-
-                    <label class="form-check-label">
-
-                        <?= $b['nama_barang'] ?>
-
-                        -
-                        Rp <?= number_format($b['harga_sewa']) ?>
-
-                    </label>
-
-                </div>
-
-                <input type="number" name="jumlah_barang[<?= $b['id'] ?>]" class="form-control" min="1"
-                    value="1">
-
-            </div>
-
-            <?php endwhile; ?>
-
-            <hr>
-
-            <h5 class="mb-3">
-                Pilih Paket
-            </h5>
-
-            <?php while($pk = mysqli_fetch_assoc($paket)) : ?>
-
-            <div class="border rounded p-3 mb-2">
-
-                <div class="form-check mb-2">
-
-                    <input type="checkbox" name="paket[<?= $pk['id'] ?>]" value="<?= $pk['id'] ?>"
-                        class="form-check-input">
-
-                    <label class="form-check-label">
-
-                        <?= $pk['nama_paket'] ?>
-
-                        -
-                        Rp <?= number_format($pk['harga_paket']) ?>
-
-                    </label>
-
-                </div>
-
-                <input type="number" name="jumlah_paket[<?= $pk['id'] ?>]" class="form-control" min="1"
-                    value="1">
-
-            </div>
-
-            <?php endwhile; ?>
-
-            <button type="submit" name="submit" class="btn btn-dark mt-3">
-                Simpan Transaksi
-            </button>
-
-        </form>
+        </p>
 
     </div>
 
+    <a href="index.php?page=transaksi" class="btn btn-light btn-back">
+        <i class="bi bi-arrow-left me-2"></i>
+
+        Kembali
+    </a>
+
 </div>
+
+<!-- FORM -->
+
+<form method="POST">
+
+    <div class="row g-4">
+
+        <!-- LEFT -->
+
+        <div class="col-lg-8">
+
+            <!-- INFORMASI TRANSAKSI -->
+
+            <div class="card modern-card border-0 mb-4">
+
+                <div class="card-body p-4 p-lg-5">
+
+                    <div class="section-title mb-4">
+
+                        <i class="bi bi-receipt-cutoff"></i>
+
+                        Informasi Transaksi
+
+                    </div>
+
+                    <div class="row">
+
+                        <!-- KODE -->
+
+                        <div class="col-md-6 mb-4">
+
+                            <label class="form-label modern-label">
+
+                                Kode Transaksi
+
+                            </label>
+
+                            <div class="input-group modern-input-group">
+
+                                <span class="input-group-text">
+
+                                    <i class="bi bi-upc-scan"></i>
+
+                                </span>
+
+                                <input type="text" class="form-control modern-input" value="<?= $kode_transaksi ?>"
+                                    readonly>
+
+                            </div>
+
+                        </div>
+
+                        <!-- PENYEWA -->
+
+                        <div class="col-md-6 mb-4">
+
+                            <label class="form-label modern-label">
+
+                                Nama Penyewa
+
+                            </label>
+
+                            <div class="input-group modern-input-group">
+
+                                <span class="input-group-text">
+
+                                    <i class="bi bi-person-fill"></i>
+
+                                </span>
+
+                                <input type="text" name="nama_penyewa" class="form-control modern-input"
+                                    placeholder="Masukkan nama penyewa" required>
+
+                            </div>
+
+                        </div>
+
+                        <!-- TANGGAL SEWA -->
+
+                        <div class="col-md-6 mb-4">
+
+                            <label class="form-label modern-label">
+
+                                Tanggal Sewa
+
+                            </label>
+
+                            <div class="input-group modern-input-group">
+
+                                <span class="input-group-text">
+
+                                    <i class="bi bi-calendar-check-fill"></i>
+
+                                </span>
+
+                                <input type="date" name="tanggal_sewa" class="form-control modern-input" required>
+
+                            </div>
+
+                        </div>
+
+                        <!-- TANGGAL KEMBALI -->
+
+                        <div class="col-md-6 mb-4">
+
+                            <label class="form-label modern-label">
+
+                                Tanggal Kembali
+
+                            </label>
+
+                            <div class="input-group modern-input-group">
+
+                                <span class="input-group-text">
+
+                                    <i class="bi bi-calendar2-week-fill"></i>
+
+                                </span>
+
+                                <input type="date" name="tanggal_kembali" class="form-control modern-input" required>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- BARANG -->
+
+            <div class="card modern-card border-0 mb-4">
+
+                <div class="card-body p-4 p-lg-5">
+
+                    <div class="section-title mb-4">
+
+                        <i class="bi bi-backpack-fill"></i>
+
+                        Pilih Barang Rental
+
+                    </div>
+
+                    <div class="package-selection">
+
+                        <?php while($b = mysqli_fetch_assoc($barang)) : ?>
+
+                        <div class="package-item-card">
+
+                            <div class="d-flex justify-content-between align-items-center">
+
+                                <!-- CHECK -->
+
+                                <div class="form-check d-flex align-items-center gap-3">
+
+                                    <input type="checkbox" name="barang[<?= $b['id'] ?>]" value="<?= $b['id'] ?>"
+                                        class="form-check-input package-checkbox" id="barang<?= $b['id'] ?>">
+
+                                    <label class="form-check-label package-label" for="barang<?= $b['id'] ?>">
+
+                                        <div class="package-icon">
+
+                                            <i class="bi bi-backpack-fill"></i>
+
+                                        </div>
+
+                                        <div>
+
+                                            <div class="package-name">
+
+                                                <?= $b['nama_barang'] ?>
+
+                                            </div>
+
+                                            <small class="package-category">
+
+                                                Rp <?= number_format($b['harga_sewa']) ?>
+
+                                            </small>
+
+                                        </div>
+
+                                    </label>
+
+                                </div>
+
+                                <!-- JUMLAH -->
+
+                                <div class="package-qty">
+
+                                    <label class="qty-label">
+
+                                        Jumlah
+
+                                    </label>
+
+                                    <input type="number" name="jumlah_barang[<?= $b['id'] ?>]"
+                                        class="form-control qty-input" min="1" value="1">
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <?php endwhile; ?>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- PAKET -->
+
+            <div class="card modern-card border-0">
+
+                <div class="card-body p-4 p-lg-5">
+
+                    <div class="section-title mb-4">
+
+                        <i class="bi bi-box2-heart-fill"></i>
+
+                        Pilih Paket Rental
+
+                    </div>
+
+                    <div class="package-selection">
+
+                        <?php while($pk = mysqli_fetch_assoc($paket)) : ?>
+
+                        <div class="package-item-card">
+
+                            <div class="d-flex justify-content-between align-items-center">
+
+                                <!-- CHECK -->
+
+                                <div class="form-check d-flex align-items-center gap-3">
+
+                                    <input type="checkbox" name="paket[<?= $pk['id'] ?>]" value="<?= $pk['id'] ?>"
+                                        class="form-check-input package-checkbox" id="paket<?= $pk['id'] ?>">
+
+                                    <label class="form-check-label package-label" for="paket<?= $pk['id'] ?>">
+
+                                        <div class="package-icon">
+
+                                            <i class="bi bi-box-fill"></i>
+
+                                        </div>
+
+                                        <div>
+
+                                            <div class="package-name">
+
+                                                <?= $pk['nama_paket'] ?>
+
+                                            </div>
+
+                                            <small class="package-category">
+
+                                                Rp <?= number_format($pk['harga_paket']) ?>
+
+                                            </small>
+
+                                        </div>
+
+                                    </label>
+
+                                </div>
+
+                                <!-- JUMLAH -->
+
+                                <div class="package-qty">
+
+                                    <label class="qty-label">
+
+                                        Jumlah
+
+                                    </label>
+
+                                    <input type="number" name="jumlah_paket[<?= $pk['id'] ?>]"
+                                        class="form-control qty-input" min="1" value="1">
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <?php endwhile; ?>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- RIGHT -->
+
+        <div class="col-lg-4">
+
+            <div class="transaction-summary-card">
+
+                <div class="summary-icon">
+
+                    <i class="bi bi-mountains-fill"></i>
+
+                </div>
+
+                <h4 class="summary-title">
+
+                    Transaksi Rental
+
+                </h4>
+
+                <p class="summary-subtitle">
+
+                    Pastikan data penyewaan sudah benar sebelum menyimpan transaksi rental.
+
+                </p>
+
+                <div class="summary-info">
+
+                    <div class="summary-item">
+
+                        <i class="bi bi-shield-check"></i>
+
+                        Data Aman
+                    </div>
+
+                    <div class="summary-item">
+
+                        <i class="bi bi-lightning-charge-fill"></i>
+
+                        Proses Cepat
+                    </div>
+
+                    <div class="summary-item">
+
+                        <i class="bi bi-database-check"></i>
+
+                        Tersimpan Otomatis
+                    </div>
+
+                </div>
+
+                <button type="submit" name="submit" class="btn btn-success btn-modern-submit w-100 mt-4">
+                    <i class="bi bi-check-circle-fill me-2"></i>
+
+                    Simpan Transaksi
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</form>

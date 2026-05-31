@@ -1,0 +1,72 @@
+/* ========================================
+   RIWAYAT PAGE
+======================================== */
+
+.filter-card {
+  background: white;
+
+  border-radius: 24px;
+}
+
+/* FILTER INPUT */
+
+.modern-input-group {
+  border-radius: 18px;
+
+  overflow: hidden;
+}
+
+.modern-input-group .input-group-text {
+  background: #f8fafc;
+
+  border: 1px solid #e2e8f0;
+
+  color: #16a34a;
+}
+
+.modern-input {
+  border: 1px solid #e2e8f0;
+
+  height: 52px;
+
+  box-shadow: none;
+}
+
+.modern-input:focus {
+  border-color: #16a34a;
+
+  box-shadow: 0 0 0 4px rgba(22, 163, 74, 0.12);
+}
+
+/* BUTTON */
+
+.btn-modern-submit {
+  height: 52px;
+
+  border-radius: 16px;
+
+  padding: 0 24px;
+
+  font-weight: 600;
+}
+
+.btn-modern-cancel {
+  height: 52px;
+
+  border-radius: 16px;
+
+  padding: 0 24px;
+
+  font-weight: 600;
+
+  border: 1px solid #e2e8f0;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 768px) {
+  .btn-modern-submit,
+  .btn-modern-cancel {
+    width: 100%;
+  }
+}

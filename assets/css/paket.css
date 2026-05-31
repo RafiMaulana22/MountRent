@@ -1,0 +1,280 @@
+/* ========================================
+   PAKET RENTAL PAGE
+======================================== */
+
+.table-image {
+  width: 95px;
+  height: 75px;
+
+  object-fit: cover;
+
+  border-radius: 18px;
+
+  border: 3px solid #f1f5f9;
+
+  box-shadow: 0 6px 20px rgba(15, 23, 42, 0.08);
+}
+
+.table-title {
+  font-size: 15px;
+
+  color: #0f172a;
+
+  font-weight: 700;
+}
+
+.table-subtitle {
+  color: #64748b;
+
+  margin-top: 4px;
+
+  font-size: 13px;
+}
+
+.package-items {
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 10px;
+}
+
+.package-badge {
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+
+  background: #f8fafc;
+
+  border: 1px solid #e2e8f0;
+
+  padding: 8px 12px;
+
+  border-radius: 14px;
+
+  font-size: 13px;
+
+  color: #334155;
+
+  font-weight: 500;
+}
+
+.package-badge strong {
+  color: #16a34a;
+
+  font-size: 13px;
+}
+
+.price-box {
+  background: linear-gradient(135deg, #16a34a, #15803d);
+
+  color: white;
+
+  padding: 10px 16px;
+
+  border-radius: 16px;
+
+  font-weight: 700;
+
+  font-size: 14px;
+
+  display: inline-block;
+
+  box-shadow: 0 10px 25px rgba(22, 163, 74, 0.18);
+}
+
+/* ========================================
+   DATATABLE
+======================================== */
+
+.dataTables_wrapper .dataTables_filter input {
+  border-radius: 14px !important;
+
+  border: 1px solid #dbe2ea !important;
+
+  padding: 10px 16px !important;
+
+  background: #f8fafc !important;
+
+  min-width: 260px;
+}
+
+.dataTables_wrapper .dataTables_length select {
+  border-radius: 12px !important;
+
+  border: 1px solid #dbe2ea !important;
+
+  padding: 6px 30px 6px 12px !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+  border-radius: 12px !important;
+
+  margin: 0 4px;
+
+  border: none !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current {
+  background: linear-gradient(135deg, #16a34a, #15803d) !important;
+
+  color: white !important;
+
+  border: none !important;
+
+  box-shadow: 0 10px 20px rgba(22, 163, 74, 0.2);
+}
+
+/* ========================================
+   RESPONSIVE
+======================================== */
+
+@media (max-width: 992px) {
+  .table-image {
+    width: 80px;
+    height: 65px;
+  }
+
+  .package-items {
+    gap: 8px;
+  }
+
+  .package-badge {
+    font-size: 12px;
+
+    padding: 7px 10px;
+  }
+}
+
+@media (max-width: 768px) {
+  .dataTables_wrapper .dataTables_filter input {
+    min-width: 100%;
+  }
+}
+
+/* ========================================
+   PACKAGE SELECTION
+======================================== */
+
+.package-selection {
+  display: flex;
+  flex-direction: column;
+
+  gap: 16px;
+}
+
+.package-item-card {
+  background: #f8fafc;
+
+  border: 1px solid #e2e8f0;
+
+  border-radius: 22px;
+
+  padding: 20px;
+
+  transition: 0.3s;
+}
+
+.package-item-card:hover {
+  border-color: #16a34a;
+
+  transform: translateY(-2px);
+
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+}
+
+.package-label {
+  display: flex;
+  align-items: center;
+
+  gap: 16px;
+
+  cursor: pointer;
+}
+
+.package-checkbox {
+  width: 22px;
+  height: 22px;
+
+  margin-top: 0;
+}
+
+.package-checkbox:checked {
+  background-color: #16a34a;
+
+  border-color: #16a34a;
+}
+
+.package-icon {
+  width: 55px;
+  height: 55px;
+
+  background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+
+  color: #16a34a;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 18px;
+
+  font-size: 22px;
+}
+
+.package-name {
+  font-weight: 700;
+
+  color: #0f172a;
+
+  font-size: 15px;
+}
+
+.package-category {
+  color: #64748b;
+}
+
+.package-qty {
+  width: 110px;
+}
+
+.qty-label {
+  font-size: 12px;
+
+  color: #64748b;
+
+  margin-bottom: 6px;
+
+  display: block;
+}
+
+.qty-input {
+  border-radius: 14px;
+
+  border: 1px solid #dbe2ea;
+
+  height: 45px;
+
+  text-align: center;
+
+  font-weight: 600;
+}
+
+/* ========================================
+   RESPONSIVE
+======================================== */
+
+@media (max-width: 768px) {
+  .package-item-card .d-flex {
+    flex-direction: column;
+
+    align-items: flex-start !important;
+
+    gap: 20px;
+  }
+
+  .package-qty {
+    width: 100%;
+  }
+}

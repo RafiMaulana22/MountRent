@@ -5,102 +5,324 @@ include 'config/koneksi.php';
 $query = mysqli_query(
     $conn,
     "
-    SELECT barang.*, kategori.nama_kategori
+    SELECT
+        barang.*,
+        kategori.nama_kategori
+
     FROM barang
-    JOIN kategori ON barang.kategori_id = kategori.id
+
+    JOIN kategori
+    ON barang.kategori_id = kategori.id
+
     ORDER BY barang.id DESC
 ",
 );
 
 ?>
 
-<div class="d-flex justify-content-between align-items-center mb-4">
+<!-- PAGE HEADER -->
 
-    <h3>
-        Data Barang
-    </h3>
+<div class="page-header mb-4">
 
-    <a href="index.php?page=barang-tambah" class="btn btn-dark">
+    <div>
+
+        <h2 class="page-title">
+
+            Data Barang
+
+        </h2>
+
+        <p class="page-subtitle">
+
+            Kelola perlengkapan rental outdoor MountRent
+
+        </p>
+
+    </div>
+
+    <a href="index.php?page=barang-tambah" class="btn btn-success btn-modern">
+        <i class="bi bi-plus-circle me-2"></i>
+
         Tambah Barang
     </a>
 
 </div>
 
-<div class="card border-0 shadow-sm">
+<!-- CARD -->
 
-    <div class="card-body">
+<div class="card modern-card border-0">
 
-        <table class="table table-bordered align-middle">
+    <div class="card-body p-4">
 
-            <thead>
+        <div class="table-responsive">
 
-                <tr>
-                    <th>No</th>
-                    <th>Foto</th>
-                    <th>Kode</th>
-                    <th>Nama Barang</th>
-                    <th>Kategori</th>
-                    <th>Kapasitas</th>
-                    <th>1 Hari</th>
-                    <th>+ Hari</th>
-                    <th width="20%">Aksi</th>
-                </tr>
+            <table class="table align-middle" id="tableBarang">
 
-            </thead>
+                <thead>
 
-            <tbody>
+                    <tr>
 
-                <?php
-                $no = 1;
+                        <th width="5%">
+                            No
+                        </th>
 
-                while ($data = mysqli_fetch_assoc($query)) :
-                ?>
+                        <th width="10%">
+                            Foto
+                        </th>
 
-                <tr>
+                        <th>
+                            Barang
+                        </th>
 
-                    <td><?= $no++ ?></td>
+                        <th>
+                            Kategori
+                        </th>
 
-                    <td>
-                        <img src="uploads/barang/<?= $data['foto'] ?>" width="80">
-                    </td>
+                        <th>
+                            Kapasitas
+                        </th>
 
-                    <td><?= $data['kode_barang'] ?></td>
+                        <th>
+                            1 Hari
+                        </th>
 
-                    <td><?= $data['nama_barang'] ?></td>
+                        <th>
+                            + Hari
+                        </th>
 
-                    <td><?= $data['nama_kategori'] ?></td>
+                        <th width="15%">
+                            Aksi
+                        </th>
 
-                    <td><?= $data['kapasitas'] ?></td>
+                    </tr>
 
-                    <td>
-                        Rp <?= number_format($data['harga_sewa']) ?>
-                    </td>
+                </thead>
 
-                    <td>
-                        Rp <?= number_format($data['harga_tambah_hari']) ?>
-                    </td>
+                <tbody>
 
-                    <td>
+                    <?php
+                    $no = 1;
 
-                        <a href="index.php?page=barang-edit&id=<?= $data['id'] ?>" class="btn btn-warning btn-sm">
-                            Edit
-                        </a>
+                    while ($data = mysqli_fetch_assoc($query)) :
+                    ?>
 
-                        <a href="index.php?page=barang-hapus&id=<?= $data['id'] ?>" class="btn btn-danger btn-sm"
-                            onclick="return confirm('Yakin hapus barang?')">
-                            Hapus
-                        </a>
+                    <tr>
 
-                    </td>
+                        <!-- NO -->
 
-                </tr>
+                        <td>
 
-                <?php endwhile; ?>
+                            <span class="table-number">
 
-            </tbody>
+                                <?= $no++ ?>
 
-        </table>
+                            </span>
+
+                        </td>
+
+                        <!-- FOTO -->
+
+                        <td>
+
+                            <img src="uploads/barang/<?= $data['foto'] ?>" class="barang-image">
+
+                        </td>
+
+                        <!-- BARANG -->
+
+                        <td>
+
+                            <div class="d-flex flex-column">
+
+                                <span class="fw-bold text-dark">
+
+                                    <?= $data['nama_barang'] ?>
+
+                                </span>
+
+                                <small class="text-muted">
+
+                                    <?= $data['kode_barang'] ?>
+
+                                </small>
+
+                            </div>
+
+                        </td>
+
+                        <!-- KATEGORI -->
+
+                        <td>
+
+                            <span class="badge-kategori">
+
+                                <?= $data['nama_kategori'] ?>
+
+                            </span>
+
+                        </td>
+
+                        <!-- KAPASITAS -->
+
+                        <td>
+
+                            <span class="text-muted">
+
+                                <?= $data['kapasitas'] ?>
+
+                            </span>
+
+                        </td>
+
+                        <!-- HARGA -->
+
+                        <td>
+
+                            <div class="harga-box">
+
+                                Rp <?= number_format($data['harga_sewa']) ?>
+
+                            </div>
+
+                        </td>
+
+                        <!-- TAMBAH HARI -->
+
+                        <td>
+
+                            <div class="harga-tambah">
+
+                                Rp <?= number_format($data['harga_tambah_hari']) ?>
+
+                            </div>
+
+                        </td>
+
+                        <!-- AKSI -->
+
+                        <td>
+
+                            <div class="d-flex gap-2">
+
+                                <!-- EDIT -->
+
+                                <a href="index.php?page=barang-edit&id=<?= $data['id'] ?>"
+                                    class="btn btn-warning btn-action">
+                                    <i class="bi bi-pencil-square"></i>
+                                </a>
+
+                                <!-- HAPUS -->
+
+                                <button type="button" class="btn btn-danger btn-action btn-delete"
+                                    data-href="index.php?page=barang-hapus&id=<?= $data['id'] ?>">
+                                    <i class="bi bi-trash-fill"></i>
+                                </button>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                    <?php endwhile; ?>
+
+                </tbody>
+
+            </table>
+
+        </div>
 
     </div>
 
 </div>
+
+<!-- DATATABLE -->
+
+<script>
+    $(document).ready(function() {
+
+        let table = $('#tableBarang').DataTable({
+
+            responsive: true,
+
+            autoWidth: false,
+
+            pageLength: 10,
+
+            language: {
+
+                search: "_INPUT_",
+
+                searchPlaceholder: "Cari barang...",
+
+                lengthMenu: "Tampilkan _MENU_ data",
+
+                info: "Menampilkan _START_ - _END_ dari _TOTAL_ data",
+
+                paginate: {
+
+                    previous: "‹",
+
+                    next: "›"
+
+                }
+
+            }
+
+        });
+
+        // FIX RESPONSIVE SIDEBAR
+
+        $('#toggleSidebar').on('click', function() {
+
+            setTimeout(function() {
+
+                table.columns.adjust().responsive.recalc();
+
+            }, 300);
+
+        });
+
+    });
+</script>
+
+<!-- SWEETALERT -->
+
+<script>
+    $(document).on('click', '.btn-delete', function() {
+
+        let href =
+            $(this).data('href');
+
+        Swal.fire({
+
+            title: 'Hapus Barang?',
+
+            text: 'Data barang akan dihapus permanen.',
+
+            icon: 'warning',
+
+            showCancelButton: true,
+
+            confirmButtonColor: '#dc2626',
+
+            cancelButtonColor: '#64748b',
+
+            confirmButtonText: 'Ya, Hapus',
+
+            cancelButtonText: 'Batal',
+
+            borderRadius: 20
+
+        }).then((result) => {
+
+            if (result.isConfirmed) {
+
+                window.location.href = href;
+
+            }
+
+        });
+
+    });
+</script>

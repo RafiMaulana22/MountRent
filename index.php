@@ -2,19 +2,15 @@
 
 session_start();
 
-// Jika belum login → tampil landing
+// Jika belum login → landing
 if (!isset($_SESSION['login'])) {
-
     header('Location: landing/index.php');
     exit();
 }
 
-// Jika sudah login → masuk admin
-
 $page = $_GET['page'] ?? 'dashboard';
 
 $halaman = [
-
     // Dashboard
     'dashboard' => 'pages/dashboard/index.php',
 
@@ -30,7 +26,7 @@ $halaman = [
     'barang-edit' => 'pages/barang/edit.php',
     'barang-hapus' => 'pages/barang/hapus.php',
 
-    // Paket Rental
+    // Paket
     'paket' => 'pages/paket/index.php',
     'paket-tambah' => 'pages/paket/tambah.php',
     'paket-edit' => 'pages/paket/edit.php',
@@ -67,33 +63,44 @@ $halaman = [
 
 <?php include 'includes/header.php'; ?>
 
-<?php include 'includes/navbar.php'; ?>
-
 <div class="wrapper">
+
+    <!-- SIDEBAR -->
 
     <?php include 'includes/sidebar.php'; ?>
 
-    <div class="content">
+    <!-- MAIN CONTENT -->
 
-        <?php
+    <div class="main-content" id="mainContent">
 
-        if (array_key_exists($page, $halaman)) {
+        <!-- NAVBAR -->
 
-            include $halaman[$page];
+        <?php include 'includes/navbar.php'; ?>
 
-        } else {
+        <!-- CONTENT -->
 
-            echo "
-                <div class='alert alert-danger'>
-                    Halaman tidak ditemukan
-                </div>
-            ";
-        }
+        <div class="content">
 
-        ?>
+            <?php
+
+            if (array_key_exists($page, $halaman)) {
+                include $halaman[$page];
+            } else {
+                echo "
+                                <div class='alert alert-danger'>
+                                    Halaman tidak ditemukan
+                                </div>
+                            ";
+            }
+
+            ?>
+
+        </div>
+
+        <!-- FOOTER -->
+
+        <?php include 'includes/footer.php'; ?>
 
     </div>
 
 </div>
-
-<?php include 'includes/footer.php'; ?>
