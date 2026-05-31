@@ -7,64 +7,55 @@
     <ul class="nav flex-column">
 
         <li class="nav-item mb-2">
-            <a href="../dashboard.php" class="nav-link text-white">
-                <i class="bi bi-grid"></i>
+            <a href="index.php?page=dashboard" class="nav-link text-white">
                 Dashboard
             </a>
         </li>
 
         <li class="nav-item mb-2">
-            <a href="../kategori/index.php" class="nav-link text-white">
-                <i class="bi bi-tags"></i>
+            <a href="index.php?page=kategori" class="nav-link text-white">
                 Kategori
             </a>
         </li>
 
         <li class="nav-item mb-2">
-            <a href="../barang/index.php" class="nav-link text-white">
-                <i class="bi bi-backpack2"></i>
+            <a href="index.php?page=barang" class="nav-link text-white">
                 Barang
             </a>
         </li>
 
         <li class="nav-item mb-2">
-            <a href="../paket/index.php" class="nav-link text-white">
-                <i class="bi bi-box"></i>
+            <a href="index.php?page=paket" class="nav-link text-white">
                 Paket Rental
             </a>
         </li>
 
         <li class="nav-item mb-2">
-            <a href="../penyewa/index.php" class="nav-link text-white">
-                <i class="bi bi-people"></i>
+            <a href="index.php?page=penyewa" class="nav-link text-white">
                 Penyewa
             </a>
         </li>
 
         <li class="nav-item mb-2">
-            <a href="../transaksi/index.php" class="nav-link text-white">
-                <i class="bi bi-receipt"></i>
+            <a href="index.php?page=transaksi" class="nav-link text-white">
                 Transaksi
             </a>
         </li>
 
         <li class="nav-item mb-2">
-            <a href="../riwayat/index.php" class="nav-link text-white">
-                <i class="bi bi-clock-history"></i>
+            <a href="index.php?page=riwayat" class="nav-link text-white">
                 Riwayat
             </a>
         </li>
 
         <li class="nav-item mb-2">
-            <a href="../laporan/index.php" class="nav-link text-white">
-                <i class="bi bi-file-earmark-text"></i>
+            <a href="index.php?page=laporan" class="nav-link text-white">
                 Laporan
             </a>
         </li>
 
         <li class="nav-item mb-2">
-            <a href="../pengaturan/index.php" class="nav-link text-white">
-                <i class="bi bi-gear"></i>
+            <a href="index.php?page=pengaturan" class="nav-link text-white">
                 Pengaturan
             </a>
         </li>

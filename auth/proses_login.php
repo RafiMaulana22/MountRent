@@ -19,7 +19,7 @@ if ($data) {
 
         $_SESSION['nama_lengkap'] = $data['nama_lengkap'];
 
-        header('Location: ../admin/dashboard.php');
+        header("Location: ../index.php?page=dashboard");
         exit();
     }
 }
